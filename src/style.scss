@@ -1,0 +1,98 @@
+@use "css" as *;
+
+// GLOBAL COMPONENTS
+// display
+body > div {
+  display: flow-root;
+  min-height: 100vh;
+  background-color: hsl(var(--clr-white), 0.2);
+  @media (prefers-color-scheme: dark) {
+    --color: var(--clr), 10%, 20%;
+    --clr-lighter: var(--clr), 10%, 20%;
+    --clr-darker: var(--clr), 10%, 10%;
+    --clr-accent: calc(var(--clr) + 180), 10%, 20%;
+
+    background-color: hsl(var(--clr-black), 0.2);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none;
+      transition: none;
+    }
+  }
+
+  & > header {
+    display: flow-root;
+  }
+
+  & > main {
+    display: flow-root;
+    margin: 2rem auto;
+  }
+  section {
+    display: flow-root;
+    margin: 1rem auto;
+    padding: 0.4rem;
+    max-width: 80rem;
+  }
+
+  & > footer {
+    display: flow-root;
+    margin-top: 4rem;
+  }
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+.grid {
+  display: grid;
+  gap: 0.4rem;
+}
+.clear-float {
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+.container {
+  container-type: inline-size;
+}
+
+// texts
+button {
+  cursor: pointer;
+  &.link,
+  &.bt {
+    box-shadow: 2px 2px 0.1rem black;
+    &:active {
+      box-shadow: inset 2px 2px 0.1rem black;
+    }
+  }
+  &.bt {
+    display: block;
+    width: 4rem;
+    aspect-ratio: 1/1;
+    background-color: hsl(var(--clr-accent), 0.8);
+  }
+}
+
+.link {
+  display: inline-block;
+  padding: 0.4rem;
+  color: hsl(var(--clr-black));
+  background-color: hsl(var(--clr-white));
+  &:is(:hover, :focus) {
+    color: hsl(var(--clr-white));
+    background-color: hsl(var(--clr-black));
+  }
+}
+
+// medias
+.img {
+  background: conic-gradient(black, white);
+}
