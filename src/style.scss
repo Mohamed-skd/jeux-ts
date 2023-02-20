@@ -5,14 +5,14 @@
 body > div {
   display: flow-root;
   min-height: 100vh;
-  background-color: hsl(var(--clr-white), 0.2);
+  background-color: hsl(var(--clr-lighter), 0.2);
   @media (prefers-color-scheme: dark) {
     --color: var(--clr), 10%, 20%;
     --clr-lighter: var(--clr), 10%, 20%;
     --clr-darker: var(--clr), 10%, 10%;
     --clr-accent: calc(var(--clr) + 180), 10%, 20%;
 
-    background-color: hsl(var(--clr-black), 0.2);
+    background-color: hsl(var(--clr-darker), 0.2);
   }
   @media (prefers-reduced-motion: reduce) {
     * {
@@ -23,9 +23,21 @@ body > div {
 
   & > header {
     display: flow-root;
+    padding: 2rem;
   }
-  #page-nav ul {
-    flex-wrap: wrap;
+  #page-nav {
+    position: relative;
+    z-index: 100;
+    padding: 0.4rem;
+    @media (width>40rem) {
+      position: sticky;
+      top: 0.2rem;
+    }
+
+    ul {
+      flex-wrap: wrap;
+      font-weight: bold;
+    }
   }
 
   & > main {
@@ -33,6 +45,7 @@ body > div {
     margin: 2rem auto;
   }
   section {
+    scroll-margin-top: 4rem;
     display: flow-root;
     margin: 1rem auto;
     padding: 0.4rem;
@@ -42,6 +55,14 @@ body > div {
   & > footer {
     display: flow-root;
     margin-top: 4rem;
+    padding: 0.2rem;
+    background-color: hsl(var(--clr-lighter), 0.4);
+
+    #copyright {
+      margin-right: 2rem;
+      float: right;
+      color: currentColor;
+    }
   }
 }
 
@@ -60,6 +81,16 @@ body > div {
     content: "";
     display: block;
     clear: both;
+  }
+}
+.loader {
+  padding: 1rem;
+  div {
+    width: 4rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background: conic-gradient(hsl(var(--clr-lighter)), hsl(var(--clr-darker)));
+    animation: spin 1s infinite linear;
   }
 }
 
@@ -86,7 +117,7 @@ button {
   padding: 0.4rem;
   color: hsl(var(--clr-black));
   background-color: hsl(var(--clr-white));
-  &:is(:hover, :focus) {
+  &:hover {
     color: hsl(var(--clr-white));
     background-color: hsl(var(--clr-black));
   }

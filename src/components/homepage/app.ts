@@ -1,4 +1,11 @@
-import { random, select, selectAll } from "../../utils/ts/funcs.js";
+import {
+  create,
+  formatText,
+  random,
+  select,
+  selectAll,
+} from "../../utils/ts/funcs.js";
+import { affiliationArticle, affiliationList } from "../../utils/ts/types.js";
 
 export default function homepage() {
   // guess number
@@ -62,12 +69,12 @@ export default function homepage() {
   guessForm.addEventListener("submit", guessNumber);
 
   // tic tac toe
-  const tttGrid = select("#ttt-grid")!;
-  const tttBoxes = selectAll(".ttt-box");
-  const tttInfo = select("#ttt-info")!;
+  const tttGrid = select("#ttt-game > .grid")!;
+  const tttBoxes = selectAll("#ttt-game .box");
+  const tttInfo = select("#ttt-game .info")!;
   const tttScoreX = select("#ttt-score-x")!;
   const tttScoreO = select("#ttt-score-o")!;
-  const tttReplay = select("#ttt-replay")!;
+  const tttReplay = select("#ttt-game .replay")!;
   const tttWins = [
     [0, 1, 2],
     [3, 4, 5],
@@ -84,35 +91,35 @@ export default function homepage() {
   let scoreTttO = 0;
   let infoTtt = "👀";
 
-  const ticTacToeInfos = () => {
+  const tttInfos = () => {
     tttScoreX.textContent = `Joueur X : ${scoreTttX}`;
     tttScoreO.textContent = `Joueur O : ${scoreTttO}`;
     tttInfo.textContent = infoTtt;
   };
-  const ticTacToeReset = () => {
+  const tttReset = () => {
     tttBoxes.forEach((box) => (box.textContent = ""));
     tttEndgame = false;
     tttTurn = false;
     infoTtt = "👀";
-    ticTacToeInfos();
+    tttInfos();
   };
-  const ticTacToeReplay = () => {
+  const replayTtt = () => {
     scoreTttX = 0;
     scoreTttO = 0;
-    ticTacToeReset();
+    tttReset();
   };
   const ticTacToe = (e: Event) => {
-    const cible = e.target as HTMLDivElement;
+    const target = e.target as HTMLDivElement;
     if (
-      !cible.classList.contains("ttt-box") ||
-      cible.textContent !== "" ||
+      !target.classList.contains("box") ||
+      target.textContent !== "" ||
       tttEndgame
     )
       return;
 
     tttTurn = !tttTurn;
-    let tttPlayer = tttTurn ? "X" : "O";
-    cible.textContent = tttPlayer;
+    const player = tttTurn ? "X" : "O";
+    target.textContent = player;
 
     for (const win of tttWins) {
       if (
@@ -120,22 +127,131 @@ export default function homepage() {
         tttBoxes[win[0]].textContent === tttBoxes[win[1]].textContent &&
         tttBoxes[win[0]].textContent === tttBoxes[win[2]].textContent
       ) {
-        infoTtt = `Bravo Joueur ${tttPlayer} ! 🏅`;
+        infoTtt = `Bravo Joueur ${player} ! 🏅`;
         tttEndgame = true;
-        tttPlayer === "X" ? scoreTttX++ : scoreTttO++;
-        ticTacToeInfos();
-        setTimeout(ticTacToeReset, 2000);
+        player === "X" ? scoreTttX++ : scoreTttO++;
+        tttInfos();
+        setTimeout(tttReset, 2000);
       }
     }
 
     if (tttBoxes.every((box) => box.textContent !== "") && !tttEndgame) {
       infoTtt = `Match Nul. 😐`;
-      ticTacToeInfos();
-      setTimeout(ticTacToeReset, 2000);
+      tttInfos();
+      setTimeout(tttReset, 2000);
     }
   };
 
-  ticTacToeInfos();
+  tttInfos();
   tttGrid.addEventListener("click", ticTacToe);
-  tttReplay.addEventListener("click", ticTacToeReplay);
+  tttReplay.addEventListener("click", replayTtt);
+
+  // rock, paper, scissors
+  const rpsPlayer = select("#rps-player .move")!;
+  const rpsPlayerEmot = select("#rps-player .emot")!;
+  const rpsInfo = select("#rps-info p")!;
+  const rpsBot = select("#rps-bot .move")!;
+  const rpsOptions = select("#rps-options")!;
+  const rpsOptionsBt = selectAll("#rps-options .bt")!;
+  const rpsScorePlayer = select("#rps-score-player")!;
+  const rpsScoreBot = select("#rps-score-bot")!;
+  const rpsReplay = select("#rps-game .replay")!;
+  const rpsWins = [
+    [0, 2],
+    [1, 0],
+    [2, 1],
+  ];
+  let infoRps = "👀";
+  let scoreRpsPlayer = 0;
+  let scoreRpsBot = 0;
+
+  const rpsInfos = () => {
+    const emot = scoreRpsPlayer >= scoreRpsBot ? "😊" : "🥲";
+    rpsInfo.textContent = infoRps;
+    rpsPlayerEmot.textContent = emot;
+    rpsScorePlayer.textContent = `${emot} : ${scoreRpsPlayer}`;
+    rpsScoreBot.textContent = `🤖 : ${scoreRpsBot}`;
+  };
+  const replayRps = () => {
+    infoRps = "👀";
+    rpsPlayer.textContent = "";
+    rpsBot.textContent = "";
+    scoreRpsPlayer = 0;
+    scoreRpsBot = 0;
+    rpsInfos();
+  };
+  const rockPaperScissors = (e: Event) => {
+    const target = e.target as HTMLButtonElement;
+
+    if (!target.classList.contains("bt")) return;
+    const player = target.textContent;
+    const bot = rpsOptionsBt[random(3)].textContent;
+    rpsPlayer.textContent = player;
+    rpsBot.textContent = bot;
+
+    for (const win of rpsWins) {
+      if (
+        player === rpsOptionsBt[win[0]].textContent &&
+        bot === rpsOptionsBt[win[1]].textContent
+      ) {
+        infoRps = "Gagné 🏅";
+        scoreRpsPlayer++;
+        break;
+      } else if (
+        player === rpsOptionsBt[win[1]].textContent &&
+        bot === rpsOptionsBt[win[0]].textContent
+      ) {
+        infoRps = "Perdu ❌";
+        scoreRpsBot++;
+        break;
+      } else {
+        infoRps = "Égalité 😐";
+      }
+    }
+
+    rpsInfos();
+  };
+
+  rpsInfos();
+  rpsOptions.addEventListener("click", rockPaperScissors);
+  rpsReplay.addEventListener("click", replayRps);
+
+  // snake
+
+  // connect 4
+
+  // play
+  const playGrid = select("#play > .grid")!;
+
+  const affiliationElem = (elem: affiliationArticle) => {
+    const { name, img, link } = elem;
+    const article = create("article");
+    const artLink = create("a", { href: link, target: "_blank" });
+    const artImg = create("img", {
+      src: img,
+      alt: name,
+      loading: "lazy",
+      width: "250",
+      height: "250",
+    });
+    const artName = create("p", { class: "link" });
+
+    artName.textContent = formatText(name);
+    artLink.append(artImg, artName);
+    article.append(artLink);
+
+    return article;
+  };
+  const playDatasFetch = async () => {
+    try {
+      const playDatas = await fetch("data/play.json");
+      const playDatasListe: affiliationList = await playDatas.json();
+
+      playDatasListe.map((data) => playGrid.append(affiliationElem(data)));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  playDatasFetch();
 }
