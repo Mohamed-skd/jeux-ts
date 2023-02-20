@@ -1,0 +1,64 @@
+#homepage {
+  #guess-number {
+    #guess-form {
+      margin: 1rem auto;
+      padding: 1rem;
+      max-width: 60rem;
+      background-color: hsl(var(--clr-lighter));
+      flex-wrap: wrap;
+
+      p {
+        width: 100%;
+        text-align: center;
+      }
+
+      #guess-input {
+        width: auto;
+        padding: 0.4rem;
+        text-align: center;
+        @media (width > 40rem) {
+          width: 70%;
+        }
+      }
+
+      button {
+        padding-inline: 2rem;
+      }
+    }
+  }
+
+  #ttt-game {
+    margin: 1rem auto;
+    padding: 1rem;
+    max-width: 60rem;
+    background-color: hsl(var(--clr-lighter));
+    @media (width>40rem) {
+      grid-template-columns: 2fr 1fr;
+    }
+
+    #ttt-grid {
+      grid-template-columns: repeat(3, 1fr);
+
+      .ttt-box {
+        cursor: pointer;
+        width: 100%;
+        height: 6rem;
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        background-color: hsl(var(--clr-darker));
+      }
+    }
+
+    #ttt-infos {
+      min-height: 6rem;
+
+      .flex {
+        @media (width>40rem) {
+          margin-top: 2rem;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}

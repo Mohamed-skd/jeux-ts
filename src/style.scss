@@ -1,4 +1,4 @@
-@use "css" as *;
+@use "./utils/css" as *;
 
 // GLOBAL COMPONENTS
 // display
@@ -23,6 +23,9 @@ body > div {
 
   & > header {
     display: flow-root;
+  }
+  #page-nav ul {
+    flex-wrap: wrap;
   }
 
   & > main {
@@ -58,9 +61,6 @@ body > div {
     display: block;
     clear: both;
   }
-}
-.container {
-  container-type: inline-size;
 }
 
 // texts
